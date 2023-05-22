@@ -35,7 +35,9 @@ pipeline {
         stage('tests-on-dev') {
             steps {
                 echo 'Running tests on dev...'
-                dir('python-greetings') {
+                
+                bat 'git clone https://github.com/mtararujs/course-js-api-framework.git'
+                dir('course-js-api-framework') {
                     bat '''
                         npm install
                         npm run greetings greetings_dev
@@ -58,7 +60,8 @@ pipeline {
             steps {
                 echo 'Running tests on staging...'
 
-                dir('python-greetings') {
+                bat 'git clone https://github.com/mtararujs/course-js-api-framework.git'
+                dir('course-js-api-framework') {
                     bat '''
                         npm install
                         npm run greetings greetings_staging
@@ -81,7 +84,8 @@ pipeline {
         stage('tests-on-preprod') {
             steps {
                 echo 'Running tests on preprod...'
-                dir('python-greetings') {
+                bat 'git clone https://github.com/mtararujs/course-js-api-framework.git'
+                dir('course-js-api-framework') {
                     bat '''
                         npm install
                         npm run greetings greetings_preprod
@@ -104,8 +108,8 @@ pipeline {
         stage('tests-on-prod') {
             steps {
                 echo 'Running tests on prod...'
-                
-                dir('python-greetings') {
+                bat 'git clone https://github.com/mtararujs/course-js-api-framework.git'
+                dir('course-js-api-framework') {
                     bat '''
                         npm install
                         npm run greetings greetings_prod
