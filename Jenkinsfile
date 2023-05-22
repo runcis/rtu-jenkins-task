@@ -23,45 +23,54 @@ pipeline {
                 }
             }
         }
-        deploy('dev', 'greetings-app-dev', 7001)
-        test('dev', 'greetings_dev')
-
-        deploy('staging', 'greetings-app-staging', 7002)
-        test('staging', 'greetings_staging')
-
-        deploy('preprod', 'greetings-app-preprod', 7003)
-        test('preprod', 'greetings_preprod')
-
-        deploy('prod', 'greetings-app-prod', 7004)
-        test('prod', 'greetings_prod')
+        stage('deploy-to-dev') {
+            deploy('dev', 'greetings-app-dev', 7001)
+        }
+        stage('tests-on-dev') {
+            test('dev', 'greetings_dev')
+        }
+        stage('deploy-to-staging') {
+            deploy('staging', 'greetings-app-staging', 7002)
+        }
+        stage('tests-on-staging') {
+            test('staging', 'greetings_staging')
+        }
+        stage('deploy-to-preprod') {
+            deploy('preprod', 'greetings-app-preprod', 7003)
+        }
+        stage('tests-on-preprod') {
+            test('preprod', 'greetings_preprod')
+        }
+        stage('deploy-to-prod') {
+            deploy('prod', 'greetings-app-prod', 7004)
+        }
+        stage('tests-on-prod') {
+            test('prod', 'greetings_prod')
+        }
     }
 }
 
 
 def deploy(String stageName, String appName, int port) {
-    stage("deploy-to-${stageName}") {
-        steps {
-            echo "Deploying to ${stageName}..."
-            dir('python-greetings') {
-                bat """
-                    "C:\\Users\\rinal\\AppData\\Roaming\\npm\\pm2" delete ${appName} & EXIT /B 0"
-                    "C:\\Users\\rinal\\AppData\\Roaming\\npm\\pm2" start app.py --name ${appName} -- --port ${port}
-                """
-            }
+    steps {
+        echo "Deploying to ${stageName}..."
+        dir('python-greetings') {
+            bat """
+                "C:\\Users\\rinal\\AppData\\Roaming\\npm\\pm2" delete ${appName} & EXIT /B 0"
+                "C:\\Users\\rinal\\AppData\\Roaming\\npm\\pm2" start app.py --name ${appName} -- --port ${port}
+            """
         }
     }
 }
 
 def test(String stageName, String testCommand) {
-    stage("tests-on-${stageName}") {
-        steps {
-            echo "Running tests on ${stageName}..."
-            dir('course-js-api-framework') {
-                bat """
-                    npm install
-                    npm run greetings ${testCommand}
-                """
-            }
+    steps {
+        echo "Running tests on ${stageName}..."
+        dir('course-js-api-framework') {
+            bat """
+                npm install
+                npm run greetings ${testCommand}
+            """
         }
     }
 }
