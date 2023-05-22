@@ -6,13 +6,15 @@ pipeline {
         stage('Remove Existing Directory') {
             steps {
                 bat 'rmdir /S /Q python-greetings'
-                bat 'git clone https://github.com/mtararujs/python-greetings.git'
+                bat 'rmdir /S /Q course-js-api-framework'
             }
         }
-        stage('install-pip-deps') {
+        stage('install-pip-deps-to-delete') {
             steps {
                 
                 echo 'Installing all required dependencies...'
+                bat 'git clone https://github.com/mtararujs/python-greetings.git'
+                bat 'git clone https://github.com/mtararujs/course-js-api-framework.git'
                 dir('python-greetings') {
                     bat '''
                         python -m pip --version
@@ -36,7 +38,6 @@ pipeline {
             steps {
                 echo 'Running tests on dev...'
                 
-                bat 'git clone https://github.com/mtararujs/course-js-api-framework.git'
                 dir('course-js-api-framework') {
                     bat '''
                         npm install
@@ -50,7 +51,7 @@ pipeline {
                 echo 'Deploying to staging...'
                 dir('python-greetings') {
                     bat '''
-                        "C:\\Users\\rinal\\AppData\\Roaming\\npm\\pm2" delete greetings-app-staging & set "errorlevel=0"
+                        "C:\\Users\\rinal\\AppData\\Roaming\\npm\\pm2" delete greetings-app-staging & EXIT /B 0"
                         "C:\\Users\\rinal\\AppData\\Roaming\\npm\\pm2" start app.py --name greetings-app-staging -- --port 7002
                     '''
                 }
@@ -60,7 +61,6 @@ pipeline {
             steps {
                 echo 'Running tests on staging...'
 
-                bat 'git clone https://github.com/mtararujs/course-js-api-framework.git'
                 dir('course-js-api-framework') {
                     bat '''
                         npm install
@@ -75,7 +75,7 @@ pipeline {
                 
                 dir('python-greetings') {
                     bat '''
-                    "C:\\Users\\rinal\\AppData\\Roaming\\npm\\pm2" delete greetings-app-preprod & set "errorlevel=0"
+                    "C:\\Users\\rinal\\AppData\\Roaming\\npm\\pm2" delete greetings-app-preprod & EXIT /B 0"
                     "C:\\Users\\rinal\\AppData\\Roaming\\npm\\pm2" start app.py --name greetings-app-preprod -- --port 7003
                     '''
                 }
@@ -84,7 +84,6 @@ pipeline {
         stage('tests-on-preprod') {
             steps {
                 echo 'Running tests on preprod...'
-                bat 'git clone https://github.com/mtararujs/course-js-api-framework.git'
                 dir('course-js-api-framework') {
                     bat '''
                         npm install
@@ -99,7 +98,7 @@ pipeline {
                 
                 dir('python-greetings') {
                     bat '''
-                        "C:\\Users\\rinal\\AppData\\Roaming\\npm\\pm2" delete greetings-app-prod & set "errorlevel=0"
+                        "C:\\Users\\rinal\\AppData\\Roaming\\npm\\pm2" delete greetings-app-prod & EXIT /B 0"
                         "C:\\Users\\rinal\\AppData\\Roaming\\npm\\pm2" start app.py --name greetings-app-prod -- --port 7004
                     '''
                 }
@@ -108,13 +107,18 @@ pipeline {
         stage('tests-on-prod') {
             steps {
                 echo 'Running tests on prod...'
-                bat 'git clone https://github.com/mtararujs/course-js-api-framework.git'
                 dir('course-js-api-framework') {
                     bat '''
                         npm install
                         npm run greetings greetings_prod
                     '''
                 }
+            }
+        }
+        stage('Remove Existing Directory') {
+            steps {
+                bat 'rmdir /S /Q python-greetings'
+                bat 'rmdir /S /Q course-js-api-framework'
             }
         }
     }
