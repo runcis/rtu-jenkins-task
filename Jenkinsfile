@@ -6,7 +6,7 @@ pipeline {
         stage('install-pip-deps') {
             steps {
                 echo 'Installing all required dependencies...'
-                git 'https://github.com/mtararujs/python-greetings'
+                git credentialsId: 'githubKey', url: 'https://github.com/mtararujs/python-greetings'
                 bat 'dir'
                 bat 'pip install -r requirements.txt'
             }
@@ -14,7 +14,7 @@ pipeline {
         stage('deploy-to-dev') {
             steps {
                 echo 'Deploying to dev...'
-                git 'https://github.com/mtararujs/python-greetings'
+                git credentialsId: 'githubKey', url: 'https://github.com/mtararujs/python-greetings'
                 bat 'pm2 delete greetings-app-dev || exit 0'
                 bat 'pm2 start app.py --name greetings-app-dev -- --port 7001'
             }
