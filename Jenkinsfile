@@ -1,3 +1,28 @@
+def deploy(String stageName, String appName, int port) {
+    steps {
+        echo "Deploying to ${stageName}..."
+        dir('python-greetings') {
+            bat """
+                "C:\\Users\\rinal\\AppData\\Roaming\\npm\\pm2" delete ${appName} & EXIT /B 0"
+                "C:\\Users\\rinal\\AppData\\Roaming\\npm\\pm2" start app.py --name ${appName} -- --port ${port}
+            """
+        }
+    }
+}
+
+def test(String stageName, String testCommand) {
+    steps {
+        echo "Running tests on ${stageName}..."
+        dir('course-js-api-framework') {
+            bat """
+                npm install
+                npm run greetings ${testCommand}
+            """
+        }
+    }
+}
+
+
 pipeline {
     agent any
 
@@ -46,31 +71,6 @@ pipeline {
         }
         stage('tests-on-prod') {
             test('prod', 'greetings_prod')
-        }
-    }
-}
-
-
-def deploy(String stageName, String appName, int port) {
-    steps {
-        echo "Deploying to ${stageName}..."
-        dir('python-greetings') {
-            bat """
-                "C:\\Users\\rinal\\AppData\\Roaming\\npm\\pm2" delete ${appName} & EXIT /B 0"
-                "C:\\Users\\rinal\\AppData\\Roaming\\npm\\pm2" start app.py --name ${appName} -- --port ${port}
-            """
-        }
-    }
-}
-
-def test(String stageName, String testCommand) {
-    steps {
-        echo "Running tests on ${stageName}..."
-        dir('course-js-api-framework') {
-            bat """
-                npm install
-                npm run greetings ${testCommand}
-            """
         }
     }
 }
