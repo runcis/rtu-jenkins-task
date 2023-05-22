@@ -50,7 +50,7 @@ pipeline {
                 echo 'Deploying to staging...'
                 dir('python-greetings') {
                     bat '''
-                        "C:\\Users\\rinal\\AppData\\Roaming\\npm\\pm2" delete greetings-app-staging || true
+                        "C:\\Users\\rinal\\AppData\\Roaming\\npm\\pm2" delete greetings-app-staging & set "errorlevel=0"
                         "C:\\Users\\rinal\\AppData\\Roaming\\npm\\pm2" start app.py --name greetings-app-staging -- --port 7002
                     '''
                 }
@@ -75,7 +75,7 @@ pipeline {
                 
                 dir('python-greetings') {
                     bat '''
-                    "C:\\Users\\rinal\\AppData\\Roaming\\npm\\pm2" delete greetings-app-preprod || true
+                    "C:\\Users\\rinal\\AppData\\Roaming\\npm\\pm2" delete greetings-app-preprod & set "errorlevel=0"
                     "C:\\Users\\rinal\\AppData\\Roaming\\npm\\pm2" start app.py --name greetings-app-preprod -- --port 7003
                     '''
                 }
@@ -99,7 +99,7 @@ pipeline {
                 
                 dir('python-greetings') {
                     bat '''
-                        "C:\\Users\\rinal\\AppData\\Roaming\\npm\\pm2" delete greetings-app-prod || true
+                        "C:\\Users\\rinal\\AppData\\Roaming\\npm\\pm2" delete greetings-app-prod & set "errorlevel=0"
                         "C:\\Users\\rinal\\AppData\\Roaming\\npm\\pm2" start app.py --name greetings-app-prod -- --port 7004
                     '''
                 }
