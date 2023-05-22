@@ -115,11 +115,5 @@ pipeline {
                 }
             }
         }
-        stage('Remove Existing Directory') {
-            steps {
-                bat 'rmdir /S /Q python-greetings'
-                bat 'rmdir /S /Q course-js-api-framework'
-            }
-        }
     }
 }
