@@ -3,19 +3,24 @@ pipeline {
 
     
     stages {
+        stage('Remove Existing Directory') {
+            steps {
+                bat 'rmdir /S /Q python-greetings'
+                bat 'git clone https://github.com/mtararujs/python-greetings.git'
+            }
+        }
         stage('install-pip-deps') {
             steps {
                 echo 'Installing all required dependencies...'
-                git credentialsId: 'githubKey', url: 'https://github.com/mtararujs/python-greetings'
                 bat 'dir'
-                bat 'pip install -r requirements.txt'
+                bat 'pip --version'
+                bat 'pip install -r flask==2.3.2'
             }
         }
         stage('deploy-to-dev') {
             steps {
                 echo 'Deploying to dev...'
-                git credentialsId: 'githubKey', url: 'https://github.com/mtararujs/python-greetings'
-                bat 'pm2 delete greetings-app-dev || exit 0'
+                bat 'pm2 delete greetings-app-dev || true'
                 bat 'pm2 start app.py --name greetings-app-dev -- --port 7001'
             }
         }
