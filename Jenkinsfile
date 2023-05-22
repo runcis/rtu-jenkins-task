@@ -1,3 +1,8 @@
+// github: https://github.com/runcis/rtu-jenkins-task
+/*
+Author: Rinalds Daniels Pikse
+github: https://github.com/runcis/rtu-jenkins-task
+*/
 pipeline {
     agent any
 
@@ -17,7 +22,6 @@ pipeline {
                 bat 'git clone https://github.com/mtararujs/course-js-api-framework.git'
                 dir('python-greetings') {
                     bat '''
-                        python -m pip --version
                         python -m pip install -r requirements.txt
                     '''
                 }
