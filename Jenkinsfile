@@ -5,7 +5,7 @@ pipeline {
             steps {
                 echo 'Installing all required dependencies...'
                 git 'https://github.com/mtararujs/python-greetings'
-                sh 'ls -al'
+                sh 'dir /a'
                 sh 'pip3 install -r requirements.txt'
             }
         }
